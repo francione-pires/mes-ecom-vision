@@ -21,8 +21,16 @@ export const Dashboard = () => {
 
   // Produtos mais vendidos
   const topProducts = {
-    current: "Liderança e Sabotagem Emocional Permanecendo Fiel no Ministério Ore Grande",
-    previous: "Dom Resmunglote Paternidade em Crise Breve Catecismo"
+    current: [
+      "Liderança e Sabotagem Emocional",
+      "Permanecendo Fiel no Ministério", 
+      "Ore Grande"
+    ],
+    previous: [
+      "Dom Resmungalote",
+      "Paternidade em Crise",
+      "Breve Catecismo"
+    ]
   };
 
   return (
@@ -132,7 +140,14 @@ export const Dashboard = () => {
               <CardTitle className="text-lg">Mês Atual</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
-              <p className="text-sm leading-relaxed">{topProducts.current}</p>
+              <ul className="space-y-2">
+                {topProducts.current.map((book, index) => (
+                  <li key={index} className="text-sm leading-relaxed flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-current rounded-full flex-shrink-0"></span>
+                    {book}
+                  </li>
+                ))}
+              </ul>
             </CardContent>
           </Card>
           
@@ -141,7 +156,14 @@ export const Dashboard = () => {
               <CardTitle className="text-lg">Mês Anterior</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
-              <p className="text-sm leading-relaxed">{topProducts.previous}</p>
+              <ul className="space-y-2">
+                {topProducts.previous.map((book, index) => (
+                  <li key={index} className="text-sm leading-relaxed flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-current rounded-full flex-shrink-0"></span>
+                    {book}
+                  </li>
+                ))}
+              </ul>
             </CardContent>
           </Card>
         </div>
