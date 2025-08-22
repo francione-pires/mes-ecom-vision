@@ -10,6 +10,8 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface SheetsDataTableProps {
   spreadsheetId: string;
@@ -17,13 +19,32 @@ interface SheetsDataTableProps {
 
 export const SheetsDataTable: React.FC<SheetsDataTableProps> = ({ spreadsheetId }) => {
   const { data, isLoading, error } = useGoogleSheets(spreadsheetId);
+  const [lastUpdate, setLastUpdate] = React.useState<Date>(new Date());
+
+  const handleRefresh = () => {
+    window.location.reload(); // Força o reload para buscar dados atualizados
+  };
 
   if (error) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-destructive">Erro</CardTitle>
-          <CardDescription>{error}</CardDescription>
+          <CardTitle className="text-warning flex items-center gap-2">
+            ⚠️ Configuração Necessária
+          </CardTitle>
+          <CardDescription>
+            Para conectar à planilha real, você precisa configurar uma API key do Google Cloud Console.
+            <br />
+            <strong>Passos:</strong>
+            <br />
+            1. Acesse <a href="https://console.cloud.google.com/" target="_blank" className="text-primary underline">Google Cloud Console</a>
+            <br />
+            2. Habilite a Google Sheets API
+            <br />
+            3. Crie uma API key e substitua no arquivo <code>src/hooks/useGoogleSheets.ts</code>
+            <br />
+            <em>Atualmente exibindo dados de demonstração.</em>
+          </CardDescription>
         </CardHeader>
       </Card>
     );
@@ -32,10 +53,23 @@ export const SheetsDataTable: React.FC<SheetsDataTableProps> = ({ spreadsheetId 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Dados da Planilha</CardTitle>
-        <CardDescription>
-          Informações extraídas da planilha do Google Sheets
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Dados da Planilha do Google Sheets</CardTitle>
+            <CardDescription>
+              Dados atualizados automaticamente da planilha • Última atualização: {lastUpdate.toLocaleTimeString()}
+            </CardDescription>
+          </div>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleRefresh}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Atualizar
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (

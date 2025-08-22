@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { google } from 'googleapis';
 
 export interface SheetData {
   id: string;
@@ -10,6 +11,9 @@ export interface SheetData {
   total: number;
 }
 
+// Para usar sua própria API key, substitua por uma chave válida do Google Cloud Console
+const GOOGLE_API_KEY = 'AIzaSyBvONWJQ0g8fF4W4nKrpI7J5QFjL8vXnYk'; // Substitua pela sua API key
+
 export const useGoogleSheets = (spreadsheetId: string) => {
   const [data, setData] = useState<SheetData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,8 +23,44 @@ export const useGoogleSheets = (spreadsheetId: string) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        // Simulação dos dados baseados na planilha
-        // Em produção, você precisaria usar a Google Sheets API
+        
+        const sheets = google.sheets({
+          version: 'v4',
+          auth: GOOGLE_API_KEY
+        });
+
+        // Buscar dados da primeira aba (assumindo que os dados estão na aba "E-commerce")
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId: spreadsheetId,
+          range: 'E-commerce!A:H', // Ajuste o range conforme sua planilha
+        });
+
+        const values = response.data.values;
+        
+        if (!values || values.length < 2) {
+          setData([]);
+          return;
+        }
+
+        // Pular o cabeçalho (primeira linha)
+        const dataRows = values.slice(1);
+        
+        const sheetData: SheetData[] = dataRows.map((row, index) => ({
+          id: row[1] || `${index + 1}`, // Coluna B (ID)
+          date: row[0] || '', // Coluna A (Data)
+          quantity: parseInt(row[2]) || 0, // Coluna C (Quantidade)
+          value: parseFloat(row[4]) || 0, // Coluna E (Valor)
+          city: row[6] || '', // Coluna G (Cidade)
+          state: row[7] || '', // Coluna H (Estado)
+          total: parseFloat(row[8]) || 0 // Coluna I (Total)
+        })).filter(item => item.id && item.date); // Filtrar linhas vazias
+        
+        setData(sheetData);
+        setError(null);
+      } catch (err: any) {
+        console.error('Erro ao buscar dados da planilha:', err);
+        
+        // Se houver erro na API, usar dados mock para demonstração
         const mockData: SheetData[] = [
           {
             id: '18991',
@@ -88,10 +128,7 @@ export const useGoogleSheets = (spreadsheetId: string) => {
         ];
         
         setData(mockData);
-        setError(null);
-      } catch (err) {
-        setError('Erro ao carregar dados da planilha');
-        console.error('Erro:', err);
+        setError('Usando dados de demonstração. Configure sua API key do Google para conectar à planilha real.');
       } finally {
         setIsLoading(false);
       }
