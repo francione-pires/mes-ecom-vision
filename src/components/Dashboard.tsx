@@ -1,7 +1,6 @@
 import { MetricCard } from "@/components/MetricCard";
-import { SheetsDataTable } from "@/components/SheetsDataTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingCartIcon, PackageIcon, TruckIcon, RotateCcwIcon, UsersIcon, BookOpenIcon, DollarSignIcon, TableIcon } from "lucide-react";
+import { ShoppingCartIcon, PackageIcon, TruckIcon, RotateCcwIcon, UsersIcon, BookOpenIcon, DollarSignIcon } from "lucide-react";
 
 export const Dashboard = () => {
   // Dados do e-commerce
@@ -168,15 +167,6 @@ export const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-
-      {/* Dados da Planilha */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-semibold flex items-center gap-2">
-          <TableIcon className="h-6 w-6 text-primary" />
-          Dados da Planilha
-        </h2>
-        <SheetsDataTable spreadsheetId="1FFE-lbtKTKpqb0bTwhPYnr4-6vqg8SK1r5cYksAyyKE" />
       </div>
 
       {/* Summary Stats */}
