@@ -1,22 +1,80 @@
 import { MetricCard } from "@/components/MetricCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingCartIcon, PackageIcon, TruckIcon, RotateCcwIcon, UsersIcon, BookOpenIcon, DollarSignIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ShoppingCartIcon, PackageIcon, TruckIcon, RotateCcwIcon, UsersIcon, BookOpenIcon, DollarSignIcon, RefreshCwIcon } from "lucide-react";
+import { useGoogleSheets } from "@/hooks/useGoogleSheets";
+import { useToast } from "@/hooks/use-toast";
 
 export const Dashboard = () => {
-  // Dados do e-commerce
-  const ecommerceData = {
-    orders: { current: 282, previous: 149 },
-    totalSales: { current: "35.966,56", previous: "21.871,84" },
-    averageTicket: { current: "123,00", previous: "136,00" },
-    averageShipping: { current: "28,00", previous: "31,00" },
-    returns: { current: 4, previous: 0 }
+  const { toast } = useToast();
+  const { data: sheetData, loading, error, refresh } = useGoogleSheets('1FFE-lbtKTKpqb0bTwhPYnr4-6vqg8SK1r5cYksAyyKE');
+
+  // Função para extrair dados da planilha
+  const getMetricFromSheet = (metricName: string, period: 'atual' | 'anterior' = 'atual') => {
+    const row = sheetData.find(row => 
+      row['Métrica']?.toString().toLowerCase().includes(metricName.toLowerCase())
+    );
+    
+    if (!row) return 0;
+    
+    const value = period === 'atual' ? row['Mês Atual'] : row['Mês Anterior'];
+    return value || 0;
   };
 
-  // Dados dos parceiros
+  // Dados do e-commerce com fallback para valores estáticos
+  const ecommerceData = {
+    orders: { 
+      current: loading ? 282 : getMetricFromSheet('pedidos', 'atual') || 282, 
+      previous: loading ? 149 : getMetricFromSheet('pedidos', 'anterior') || 149 
+    },
+    totalSales: { 
+      current: loading ? "35.966,56" : getMetricFromSheet('vendas', 'atual') || "35.966,56", 
+      previous: loading ? "21.871,84" : getMetricFromSheet('vendas', 'anterior') || "21.871,84" 
+    },
+    averageTicket: { 
+      current: loading ? "123,00" : getMetricFromSheet('ticket', 'atual') || "123,00", 
+      previous: loading ? "136,00" : getMetricFromSheet('ticket', 'anterior') || "136,00" 
+    },
+    averageShipping: { 
+      current: loading ? "28,00" : getMetricFromSheet('frete', 'atual') || "28,00", 
+      previous: loading ? "31,00" : getMetricFromSheet('frete', 'anterior') || "31,00" 
+    },
+    returns: { 
+      current: loading ? 4 : getMetricFromSheet('devolucao', 'atual') || 4, 
+      previous: loading ? 0 : getMetricFromSheet('devolucao', 'anterior') || 0 
+    }
+  };
+
+  // Dados dos parceiros com fallback para valores estáticos
   const partnersData = {
-    registeredPartners: { current: 41, previous: 37 },
-    booksSent: { current: 55, previous: 43 },
-    totalInvested: { current: "1.360,45", previous: "870,21" }
+    registeredPartners: { 
+      current: loading ? 41 : getMetricFromSheet('parceiros', 'atual') || 41, 
+      previous: loading ? 37 : getMetricFromSheet('parceiros', 'anterior') || 37 
+    },
+    booksSent: { 
+      current: loading ? 55 : getMetricFromSheet('livros', 'atual') || 55, 
+      previous: loading ? 43 : getMetricFromSheet('livros', 'anterior') || 43 
+    },
+    totalInvested: { 
+      current: loading ? "1.360,45" : getMetricFromSheet('investido', 'atual') || "1.360,45", 
+      previous: loading ? "870,21" : getMetricFromSheet('investido', 'anterior') || "870,21" 
+    }
+  };
+
+  const handleRefresh = async () => {
+    try {
+      await refresh();
+      toast({
+        title: "Dados atualizados",
+        description: "Os dados da planilha foram atualizados com sucesso!",
+      });
+    } catch (err) {
+      toast({
+        title: "Erro",
+        description: "Falha ao atualizar os dados da planilha.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Produtos mais vendidos
@@ -36,13 +94,33 @@ export const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background p-6 space-y-8">
       {/* Header */}
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
           Relatório Mensal E-Commerce
         </h1>
         <p className="text-muted-foreground text-lg">
           Análise comparativa: Mês Atual vs Mês Anterior
         </p>
+        
+        {/* Botão de atualizar dados */}
+        <div className="flex justify-center">
+          <Button 
+            onClick={handleRefresh} 
+            disabled={loading}
+            variant="outline" 
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <RefreshCwIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            {loading ? 'Atualizando...' : 'Atualizar Dados'}
+          </Button>
+        </div>
+
+        {error && (
+          <div className="text-destructive text-sm">
+            Erro ao carregar dados: {error}
+          </div>
+        )}
       </div>
 
       {/* E-commerce Metrics */}
