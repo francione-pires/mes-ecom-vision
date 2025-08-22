@@ -8,6 +8,61 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    
+    /* Dashboard Colors - Neutral Palette */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 98%;
+    
+    /* Neutral Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(240 5.9% 10%), hsl(240 4.8% 20%));
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%), hsl(142 71% 55%));
+    --gradient-warning: linear-gradient(135deg, hsl(38 92% 50%), hsl(38 92% 60%));
+    --gradient-info: linear-gradient(135deg, hsl(221 83% 53%), hsl(221 83% 63%));
+    
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.9% 10%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 240 5.9% 90%;
+    --sidebar-ring: 240 5.9% 10%;
+  }
+
+  .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -17,88 +72,33 @@ All colors MUST be HSL.
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 32 95% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
 
-    --secondary: 32 20% 15%;
+    --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 32 85% 65%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 32 95% 55%;
+    --ring: 0 0% 83.1%;
     
-    /* Dashboard Colors */
-    --success: 142 76% 36%;
-    --success-foreground: 355.7 100% 97.3%;
-    --warning: 32 95% 55%;
-    --warning-foreground: 0 0% 100%;
-    --info: 32 75% 45%;
-    --info-foreground: 0 0% 100%;
-    
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(32 85% 65%));
-    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(142 76% 50%));
-    --gradient-warning: linear-gradient(135deg, hsl(var(--warning)), hsl(32 95% 70%));
-    --gradient-info: linear-gradient(135deg, hsl(var(--info)), hsl(32 65% 55%));
-    
-    --radius: 0.75rem;
-
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 32 95% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 240 5.9% 10%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 32 95% 55%;
-  }
-
-  .dark {
-    --background: 32 20% 4%;
-    --foreground: 32 15% 98%;
-
-    --card: 32 20% 4%;
-    --card-foreground: 32 15% 98%;
-
-    --popover: 32 20% 4%;
-    --popover-foreground: 32 15% 98%;
-
-    --primary: 32 95% 55%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 32 15% 12%;
-    --secondary-foreground: 32 15% 98%;
-
-    --muted: 32 15% 12%;
-    --muted-foreground: 32 10% 65%;
-
-    --accent: 32 85% 65%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 32 15% 12%;
-    --input: 32 15% 12%;
-    --ring: 32 95% 55%;
-    
-    --sidebar-background: 32 20% 6%;
-    --sidebar-foreground: 32 15% 95%;
-    --sidebar-primary: 32 95% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 32 15% 12%;
-    --sidebar-accent-foreground: 32 15% 95%;
-    --sidebar-border: 32 15% 12%;
-    --sidebar-ring: 32 95% 55%;
+    --sidebar-ring: 0 0% 83.1%;
   }
 }
 
